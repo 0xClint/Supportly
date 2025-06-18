@@ -9,19 +9,32 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.830.0",
+    "@aws-sdk/lib-dynamodb": "^3.830.0",
+    "@coinbase/cdp-sdk": "^1.16.0",
+    "@coinbase/x402": "^0.3.8",
+    "@tanstack/react-query": "^5.80.7",
+    "aws-sdk": "^2.1692.0",
+    "axios": "^1.10.0",
+    "next": "15.3.3",
+    "next-auth": "^4.24.11",
+    "pinata": "^2.4.8",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "next": "15.3.3"
+    "viem": "^2.31.3",
+    "wagmi": "^2.15.6",
+    "x402-axios": "^0.4.0",
+    "x402-next": "^0.3.4"
   },
   "devDependencies": {
-    "typescript": "^5",
+    "@eslint/eslintrc": "^3",
+    "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "@tailwindcss/postcss": "^4",
-    "tailwindcss": "^4",
     "eslint": "^9",
     "eslint-config-next": "15.3.3",
-    "@eslint/eslintrc": "^3"
+    "tailwindcss": "^4",
+    "typescript": "^5"
   }
 }
