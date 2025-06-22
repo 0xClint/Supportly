@@ -18,13 +18,12 @@ export default async function Protected() {
           Your payment was successful! Enjoy this banger song.
         </p>
         <iframe
+          src="http://localhost:3000/chat.html"
           width="100%"
-          height="300"
-          scrolling="no"
-          frameBorder="no"
-          allow="autoplay"
-          src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/2044190296&color=%23ff5500&auto_play=true&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true"
+          height="400px"
+          // style="border: none;"
         ></iframe>
+
         <div
           style={{
             fontSize: "10px",
