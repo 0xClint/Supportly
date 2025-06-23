@@ -1,3 +1,4 @@
+"use client";
 import { cdpClient } from "@/lib/cdpClient";
 import { useSession } from "next-auth/react";
 import {
@@ -15,11 +16,9 @@ interface WalletProviderProps {
 
 const WalletProviderFn = () => {
   const { status, data: session } = useSession();
-  const [evmAddress, setEvmAddress] = useState<string>();
+  const [evmAddress, setEvmAddress] = useState<string>("");
   const [accountId, setAccountId] = useState<string>();
-  //   const [balances, setBalances] = useState<Partial<Record<TokenKey, string>>>(
-  //     {}
-  //   );
+  const [balances, setBalances] = useState<string>("0.00");
 
   const fetchEvmAddress = async () => {
     const res = await fetch("/api/account");
@@ -31,19 +30,20 @@ const WalletProviderFn = () => {
     }
   };
 
-  //   const refreshBalance = useCallback(
-  //     async (token: TokenKey = activeToken) => {
-  //       if (!evmAddress) return;
+  const getAccounts = async () => {
+    let response = await cdpClient.evm.listAccounts();
+    console.log(response);
+  };
 
-  //       const query = token !== "eth" ? `?token=${token}` : "";
-  //       const res = await fetch(`/api/account/balance${query}`);
-  //       if (res.ok) {
-  //         const { balance } = await res.json();
-  //         setBalances((prev) => ({ ...prev, [token]: balance }));
-  //       }
-  //     },
-  //     [evmAddress, activeToken]
-  //   );
+  const refreshBalance = useCallback(async () => {
+    if (!evmAddress) return;
+
+    const res = await fetch(`/api/account/balance`);
+    if (res.ok) {
+      const { balance } = await res.json();
+      setBalances(String(balance));
+    }
+  }, [evmAddress]);
 
   useEffect(() => {
     if (status === "authenticated") {
@@ -51,12 +51,19 @@ const WalletProviderFn = () => {
     }
   }, [status]);
 
-  //   useEffect(() => {
-  //     if (evmAddress) {
-  //       refreshBalance("eth");
-  //     }
-  //   }, [evmAddress, refreshBalance]);
-  return { evmAddress, accountId, fetchEvmAddress };
+  useEffect(() => {
+    if (evmAddress) {
+      refreshBalance();
+    }
+  }, [evmAddress]);
+  return {
+    evmAddress,
+    accountId,
+    fetchEvmAddress,
+    getAccounts,
+    refreshBalance,
+    balances,
+  };
 };
 
 type WalletContextProps = ReturnType<typeof WalletProviderFn>;

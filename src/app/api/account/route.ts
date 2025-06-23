@@ -11,7 +11,7 @@ export async function GET(req: NextRequest) {
     const account = await cdpClient.evm.getOrCreateAccount({
       name: hashEmail(session?.user.email || "clintty"),
     });
-    // console.log(account);
+    console.log(account);
     return NextResponse.json({ address: account.address });
   } catch (error) {
     console.error("Error creating wallet:", error);
