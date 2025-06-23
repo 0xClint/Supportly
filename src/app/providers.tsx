@@ -1,8 +1,7 @@
 "use client";
 
-import { AppSidebar } from "@/components/app-sidebar";
 import { ThemeProvider } from "@/components/theme-provider";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { AuthProvider } from "@/context/AuthProvider";
 import { WalletProvider } from "@/context/WalletContext";
 import { SessionProvider } from "next-auth/react";
 
@@ -14,15 +13,11 @@ export function Providers({ children }: { children: React.ReactNode }) {
       enableSystem
       disableTransitionOnChange
     >
-      <SidebarProvider>
-        <AppSidebar />
-        <main>
-          <SidebarTrigger />
-          <SessionProvider>
-            <WalletProvider>{children}</WalletProvider>
-          </SessionProvider>
-        </main>
-      </SidebarProvider>
+      <SessionProvider>
+        <AuthProvider>
+          <WalletProvider>{children}</WalletProvider>
+        </AuthProvider>
+      </SessionProvider>
     </ThemeProvider>
   );
 }

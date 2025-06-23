@@ -74,7 +74,7 @@ export const WalletProvider = ({ children }: WalletProviderProps) => {
 export const useWallet = () => {
   const context = useContext(WalletContext);
   if (!context) {
-    throw new Error("useAVSBuider must be used within a AVSProvider");
+    throw new Error("useWallet must be used within a WalletProvider");
   }
   return context;
 };
