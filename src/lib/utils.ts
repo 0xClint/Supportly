@@ -25,3 +25,7 @@ export function bigintToNumberSafe(value: bigint): number {
   }
   return Number(value);
 }
+
+export function isFloatString(str: string): boolean {
+  return /^\d+(\.\d+)?$/.test(str.trim());
+}

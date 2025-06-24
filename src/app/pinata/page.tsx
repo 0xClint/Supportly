@@ -40,6 +40,26 @@ export default function PinataPage() {
     setFile(e.target?.files?.[0]);
   };
 
+  const [loading, setLoading] = useState(false);
+
+  const handle = async () => {
+    setLoading(true);
+    const amount = "$0.50";
+    try {
+      const res = await fetch("/api/add-money", {
+        method: "POST",
+        body: JSON.stringify({ amount }),
+        headers: { "Content-Type": "application/json" },
+      });
+      const { paymentUrl } = await res.json();
+      window.location.href = paymentUrl;
+    } catch (e) {
+      console.error(e);
+      alert("Payment failed");
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <main className="p-8 max-w-3xl mx-auto">
       <h1 className="text-2xl font-bold mb-4">
@@ -57,8 +77,11 @@ export default function PinataPage() {
           height="400px"
           // style="border: none;"
         ></iframe>
+        <button onClick={fetchFile}>Retrieve</button>
       </div>
-      <button onClick={fetchFile}>Retrieve</button>
+      <button disabled={loading} onClick={handle}>
+        Add Money
+      </button>
     </main>
   );
 }
