@@ -97,8 +97,7 @@ const formSchema = z.object({
   file: z.any(), // document file
   website: z.string().optional(), // website link
 });
-
-export default function CreateService({}: React.ComponentProps<"div">) {
+function CreateService({}: React.ComponentProps<"div">) {
   const router = useRouter();
   const [embedCode, setEmbedCode] = useState<string>("");
   const [isLoading, setLoading] = useState<boolean>(false);
@@ -369,4 +368,8 @@ export default function CreateService({}: React.ComponentProps<"div">) {
       </div>
     </>
   );
+}
+
+export default function Page() {
+  return <CreateService />;
 }

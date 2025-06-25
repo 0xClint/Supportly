@@ -60,6 +60,7 @@ function PaymentForm({ evmAddress }: PaymentProps) {
     setIsProcessing(true);
     setMessage(null);
 
+    if (!address) return;
     try {
       const unSignedPaymentHeader = preparePaymentHeader(
         address,
@@ -82,7 +83,7 @@ function PaymentForm({ evmAddress }: PaymentProps) {
           name: paymentRequirements.extra?.name,
           version: paymentRequirements.extra?.version,
           chainId: getNetworkId(paymentRequirements.network),
-          verifyingContract: paymentRequirements.asset,
+          verifyingContract: paymentRequirements.asset as `0x${string}`,
         },
         primaryType: "TransferWithAuthorization" as const,
         message: unSignedPaymentHeader.payload.authorization,
