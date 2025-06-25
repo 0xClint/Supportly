@@ -1,5 +1,5 @@
 import { NetworkConfig } from "@/app/types/network";
-import { base, baseSepolia } from "viem/chains";
+import { baseSepolia } from "viem/chains";
 
 export const getNetworkConfig = (): NetworkConfig => {
   return baseSepoliaNetworkConfig;

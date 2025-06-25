@@ -51,13 +51,13 @@ const WalletProviderFn = () => {
     if (status === "authenticated") {
       fetchEvmAddress();
     }
-  }, [status]);
+  }, [status, fetchEvmAddress]);
 
   useEffect(() => {
     if (evmAddress) {
       refreshBalance();
     }
-  }, [evmAddress]);
+  }, [evmAddress, refreshBalance]);
   return {
     evmAddress,
     accountId,

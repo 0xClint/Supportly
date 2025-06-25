@@ -1,27 +1,11 @@
 "use client";
-import { useWallet } from "@/context/WalletContext";
-import { getUserByEmail } from "@/lib/db/user";
+
 import Link from "next/link";
-import { useEffect } from "react";
 
 export default function Home() {
-  const { evmAddress, accountId, fetchEvmAddress } = useWallet();
-
-  const fetchUserData = async () => {
-    console.log(evmAddress);
-    // try {
-    //   console.log("fetch user");
-    //   const user = await getUserByEmail("abc@xyz");
-    //   console.log(user);
-    // } catch (err) {
-    //   console.error("Error fetching user:", err);
-    // }
-  };
-
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 text-gray-900 flex flex-col">
       <div className="flex-grow">
-        <button onClick={fetchUserData}>fetchUsers</button>
         <section className="max-w-6xl mx-auto px-4 py-20 lg:py-28">
           <div className="text-center">
             <div className="w-64 mb-6 mx-auto">

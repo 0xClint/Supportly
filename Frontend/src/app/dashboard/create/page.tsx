@@ -1,15 +1,5 @@
 "use client";
-import React, { useRef, useState } from "react";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
-import { Separator } from "@/components/ui/separator";
-import { SidebarTrigger } from "@/components/ui/sidebar";
+import React, { useState } from "react";
 import {
   Card,
   CardContent,
@@ -46,7 +36,6 @@ import {
 } from "@/components/ui/select";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -54,12 +43,10 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { useSession } from "next-auth/react";
-import { hashEmail } from "@/lib/db/user";
+
 import { useUserData } from "@/context/UserContext";
 import { Copy, LoaderCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { Label } from "@/components/ui/label";
 import { v4 as uuid } from "uuid";
 
 const dummyModelData = [
@@ -111,10 +98,7 @@ const formSchema = z.object({
   website: z.string().optional(), // website link
 });
 
-export default function CreateService({
-  className,
-  ...props
-}: React.ComponentProps<"div">) {
+export default function CreateService({}: React.ComponentProps<"div">) {
   const router = useRouter();
   const [embedCode, setEmbedCode] = useState<string>("");
   const [isLoading, setLoading] = useState<boolean>(false);
@@ -144,9 +128,7 @@ export default function CreateService({
         body: fileForm,
       });
       const data_url = await fileUploadRes.json();
-      // console.log(data_url);
 
-      //LogoImg-Upload
       const logoForm = new FormData();
       logoForm.set("file", values.logoImage);
       logoForm.set("project_id", project_id);
@@ -156,8 +138,6 @@ export default function CreateService({
       });
       const logo_url = await logoUploadRes.json();
 
-      // const data_url = "data_url";
-      // const logo_url = "logo_url";
       const embedded_url = generateEmbedIframe(
         process.env.NEXT_PUBLIC_PAYMENT_MEDIATER_ENDPOINT!,
         userId,

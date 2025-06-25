@@ -3,32 +3,22 @@
 import * as React from "react";
 import {
   AudioWaveform,
-  BadgePercent,
-  BookOpen,
-  Bot,
   BotIcon,
   Command,
-  Frame,
   GalleryVerticalEnd,
   Gauge,
-  Map,
-  PieChart,
-  Settings2,
-  SquareTerminal,
   Wallet,
 } from "lucide-react";
 
 import { NavMain } from "@/components/nav-main";
-// import { NavProjects } from "@/components/nav-projects";
+
 import { NavUser } from "@/components/nav-user";
 import { TeamSwitcher } from "@/components/team-switcher";
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
-  SidebarGroup,
   SidebarHeader,
-  SidebarRail,
 } from "@/components/ui/sidebar";
 import { useSession } from "next-auth/react";
 
@@ -92,7 +82,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
-        <TeamSwitcher teams={data1.teams} />
+        <TeamSwitcher />
       </SidebarHeader>
       <SidebarContent>
         <NavMain projects={data1.navMain} />

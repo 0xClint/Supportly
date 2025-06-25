@@ -21,7 +21,7 @@ export function DialogDemo() {
 
       <DialogContent className="sm:max-w-[425px]">
         <form
-          onSubmit={(e) => {
+          onSubmit={() => {
             // e.preventDefault();
             console.log("Form submitted");
           }}

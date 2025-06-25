@@ -41,7 +41,7 @@ const UserDataProviderFn = () => {
     if (status === "authenticated") {
       fetchUserData();
     }
-  }, [status]);
+  }, [status, fetchUserData]);
 
   return { projects, userId, sessionCnt };
 };

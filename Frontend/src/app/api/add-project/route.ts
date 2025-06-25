@@ -24,8 +24,8 @@ export async function POST(req: NextRequest) {
     await addProjectToUser(res);
 
     return NextResponse.json({ success: true });
-  } catch (error: any) {
-    console.error("Error in add-project API:", error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (e) {
+    console.error("Error in add-project API:", e);
+    return NextResponse.json({ error: e }, { status: 500 });
   }
 }

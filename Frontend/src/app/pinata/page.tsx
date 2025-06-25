@@ -1,6 +1,5 @@
 "use client";
 import { pinataClient } from "@/lib/pinata";
-import { useSession } from "next-auth/react";
 import { useState } from "react";
 
 export default function PinataPage() {

@@ -18,7 +18,6 @@ import { preparePaymentHeader } from "x402/client";
 import { getNetworkId } from "x402/shared";
 import { exact } from "x402/schemes";
 import { injected, useAccount, useConnect, useSignTypedData } from "wagmi";
-import { paymentRequirements } from "@/lib/constants";
 import { useWallet } from "@/context/WalletContext";
 import { isFloatString } from "@/lib/utils";
 
@@ -27,9 +26,9 @@ interface PaymentProps {
 }
 
 function PaymentForm({ evmAddress }: PaymentProps) {
-  const { address, isConnected } = useAccount();
+  const { address } = useAccount();
   const { refreshBalance } = useWallet();
-  const { connect, connectors } = useConnect();
+  const { connect } = useConnect();
   const [value, setValue] = useState<string>("5");
   const [isProcessing, setIsProcessing] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
@@ -115,9 +114,9 @@ function PaymentForm({ evmAddress }: PaymentProps) {
       await refreshBalance();
       console.log("result", result);
       setMessage("✅ Payment successful!");
-    } catch (error: any) {
+    } catch (error) {
       console.error("❌ Payment error:", error);
-      setMessage(`❌ Payment failed: ${error.message || "Unknown error"}`);
+      setMessage(`❌ Payment failed: ${error || "Unknown error"}`);
     } finally {
       setIsProcessing(false);
     }

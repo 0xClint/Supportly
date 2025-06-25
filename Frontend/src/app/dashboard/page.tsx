@@ -1,7 +1,6 @@
 "use client";
 
 import * as React from "react";
-import { useTheme } from "next-themes";
 import { ServiceTable } from "@/components/data-table/service-table";
 import { columns } from "@/components/data-table/columns";
 
@@ -12,7 +11,6 @@ import { useUserData } from "@/context/UserContext";
 import { SectionCards } from "@/components/section-cards";
 
 export default function ModeToggle() {
-  const { setTheme } = useTheme();
   const { projects } = useUserData();
   const router = useRouter();
 

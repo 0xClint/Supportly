@@ -1,15 +1,12 @@
-// import { getBalanceForAddress } from '@/lib/balance';
-// import { cdpClient } from '@/lib/cdp';
 import { getServerSession } from "next-auth";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { authOptions } from "@/lib/auth";
 import { cdpClient } from "@/lib/cdpClient";
 import { getBalanceForAddress } from "@/lib/balance";
 import { hashEmail } from "@/lib/db/user";
 
-export async function GET(req: NextRequest) {
+export async function GET() {
   const session = await getServerSession(authOptions);
-  // console.log(session);
 
   const account = await cdpClient.evm.getAccount({
     name: hashEmail(session?.user.email || "clintty"),

@@ -11,10 +11,10 @@ import {
 import { Button } from "@/components/ui/button";
 import { useParams } from "next/navigation";
 import { useUserData } from "@/context/UserContext";
-import type { Project, Session } from "@/lib/db/db.types";
+import type { Project } from "@/lib/db/db.types";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { getInitials } from "@/lib/utils";
-import { CardSim, ExternalLink, SquareArrowOutUpRightIcon } from "lucide-react";
+import { ExternalLink, SquareArrowOutUpRightIcon } from "lucide-react";
 import Link from "next/link";
 
 export default function Project() {
@@ -22,10 +22,9 @@ export default function Project() {
 
   const { projects } = useUserData();
 
-  const data: Project | undefined = useMemo(
-    () => projects.find((project) => project.id == id),
-    [projects]
-  );
+  const data: Project | undefined = useMemo(() => {
+    return projects.find((project) => project.id == id);
+  }, [projects, id]);
 
   return (
     <>

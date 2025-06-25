@@ -22,7 +22,7 @@ export const columns: ColumnDef<Project>[] = [
   {
     accessorKey: "data_url",
     header: "Data file",
-    cell: ({ row }) => (
+    cell: () => (
       <Link href={`#`}>
         <Button variant="ghost">
           <CardSim /> File
