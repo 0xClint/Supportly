@@ -1,4 +1,5 @@
 import { Project, User } from "@/lib/db/db.types";
+import { totalSessionsCount } from "@/lib/utils";
 import { useSession } from "next-auth/react";
 import {
   createContext,
@@ -11,6 +12,7 @@ import {
 const UserDataProviderFn = () => {
   const [projects, setProjects] = useState<Project[]>([]);
   const [userId, setUserId] = useState<string>("");
+  const [sessionCnt, setSessionCnt] = useState<number>(1);
   const { status, data: session } = useSession();
 
   const fetchUserData = async () => {
@@ -25,8 +27,8 @@ const UserDataProviderFn = () => {
       const data = (await response.json()) as { user: User; error: string };
       const user = data.user;
       if (response.ok) {
-        console.log("User:", user);
-
+        // console.log("User:", user);
+        setSessionCnt(totalSessionsCount(user));
         setUserId(user.user_id);
         setProjects(user.projects);
       } else {
@@ -41,7 +43,7 @@ const UserDataProviderFn = () => {
     }
   }, [status]);
 
-  return { projects, userId };
+  return { projects, userId, sessionCnt };
 };
 
 type UserContextProps = ReturnType<typeof UserDataProviderFn>;

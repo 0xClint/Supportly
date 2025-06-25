@@ -2,6 +2,8 @@ import { PaymentRequirements } from "x402/types";
 
 export const USDC_TOKEN_ADDRESS = "0x036CbD53842c5426634e7929541eC2318f3dCF7e";
 
+export const QUERY_PRICE = 0.1;
+
 export const paymentRequirements = {
   scheme: "exact",
   network: "base-sepolia",

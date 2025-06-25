@@ -68,11 +68,11 @@ const data1 = {
       url: "/dashboard/services",
       icon: BotIcon,
     },
-    {
-      name: "Plans",
-      url: "/dashboard/plans",
-      icon: BadgePercent,
-    },
+    // {
+    //   name: "Plans",
+    //   url: "/dashboard/plans",
+    //   icon: BadgePercent,
+    // },
     {
       name: "Wallet",
       url: "/dashboard/wallet",

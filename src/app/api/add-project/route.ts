@@ -11,6 +11,7 @@ export async function POST(req: NextRequest) {
       data_url: string;
       website_url: string;
       embedded_url: string;
+      project_id: string;
     };
     console.log(res);
     if (!res.user_id) {

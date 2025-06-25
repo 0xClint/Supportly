@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -21,7 +21,7 @@ import { toast } from "sonner";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { cn } from "@/lib/utils";
+import { cn, generateEmbedIframe } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -39,9 +39,23 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { useSession } from "next-auth/react";
 import { hashEmail } from "@/lib/db/user";
 import { useUserData } from "@/context/UserContext";
+import { Copy, LoaderCircle } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Label } from "@/components/ui/label";
+import { v4 as uuid } from "uuid";
 
 // Dummy model data
 const dummyModelData = [
@@ -98,8 +112,11 @@ export default function CreateService({
   className,
   ...props
 }: React.ComponentProps<"div">) {
+  const router = useRouter();
+  const [embedCode, setEmbedCode] = useState<string>("");
   const [isLoading, setLoading] = useState<boolean>(false);
   const { userId } = useUserData();
+  const [open, setOpen] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -113,7 +130,7 @@ export default function CreateService({
     try {
       console.log(values);
 
-      //FileData-Upload
+      // //FileData-Upload
       // const fileForm = new FormData();
       // fileForm.set("file", values.file);
       // const fileUploadRes = await fetch("/api/upload-file", {
@@ -121,7 +138,6 @@ export default function CreateService({
       //   body: fileForm,
       // });
       // const data_url = await fileUploadRes.json();
-      // console.log(fileUrl);
 
       // //LogoImg-Upload
       // const logoForm = new FormData();
@@ -134,8 +150,13 @@ export default function CreateService({
 
       const data_url = "data_url";
       const logo_url = "logo_url";
-      const embedded_url = "embedded_url";
-
+      const project_id = uuid();
+      const embedded_url = generateEmbedIframe(
+        process.env.NEXT_PUBLIC_PAYMENT_MEDIATER_ENDPOINT!,
+        userId,
+        project_id
+      );
+      setEmbedCode(embedded_url);
       try {
         await fetch("/api/add-project", {
           method: "POST",
@@ -147,9 +168,13 @@ export default function CreateService({
             model: values.model,
             data_url,
             website_url: values.website,
+            project_id,
             embedded_url,
           }),
         });
+        await new Promise((res) => setTimeout(res, 2000));
+
+        setOpen(true);
       } catch (error) {
         console.log(error);
       } finally {
@@ -169,29 +194,17 @@ export default function CreateService({
 
   return (
     <>
-      <header className="flex h-16 items-center gap-2 px-4">
-        <SidebarTrigger className="-ml-1" />
-        <Separator orientation="vertical" className="mr-2 h-4" />
-        <Breadcrumb>
-          <BreadcrumbList>
-            <BreadcrumbItem className="hidden md:block">
-              <BreadcrumbLink href="/dashboard">Dashboard</BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator className="hidden md:block" />
-            <BreadcrumbItem>
-              <BreadcrumbPage>Create Service</BreadcrumbPage>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>
-      </header>
-
       <div className="flex flex-1 flex-col items-center gap-4 py-4 px-20 pt-0">
         <div
           className={cn(
             "relative w-[700px] flex flex-col gap-6 my-5 overflow-hidden"
           )}
         >
-          {/* <div className="absolute w-full h-full bg-transparent"></div> */}
+          {isLoading && (
+            <div className="absolute flex justify-center items-center w-full h-full bg-[#03071291]">
+              <LoaderCircle className="animate-spin" />
+            </div>
+          )}
           <Card>
             <CardHeader>
               <CardTitle className="text-xl">Create Support Chatbot</CardTitle>
@@ -321,6 +334,49 @@ export default function CreateService({
             </CardContent>
           </Card>
         </div>
+        <Dialog open={open} onOpenChange={setOpen}>
+          <DialogTrigger asChild>
+            <Button variant="outline" className="hidden">
+              Open Dialog
+            </Button>
+          </DialogTrigger>
+          <DialogContent
+            className="sm:max-w-[425px]"
+            showCloseButton={false}
+            preventOutsideClose={true}
+          >
+            <DialogHeader>
+              <DialogTitle>Project created Succesffully</DialogTitle>
+              <DialogDescription>
+                Copy this link and paste in your website site
+              </DialogDescription>
+            </DialogHeader>
+            <div className="relative grid gap-4">
+              <span className="absolute bottom-3 right-3">
+                <Button
+                  variant="secondary"
+                  className="size-7 cursor-pointer"
+                  onClick={async () =>
+                    await navigator.clipboard.writeText(embedCode)
+                  }
+                >
+                  <Copy className="h-[14px]" />
+                </Button>
+              </span>
+              <Card
+                className={cn(
+                  "p-3 pb-7 file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex  w-full rounded-md border bg-transparent text-base shadow-xs transition-[color,box-shadow] outline-none",
+                  "aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive"
+                )}
+              >
+                <pre className="whitespace-pre-wrap break-all">{embedCode}</pre>
+              </Card>
+            </div>
+            <DialogFooter>
+              <Button onClick={() => router.push("/dashboard")}>Close</Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
     </>
   );

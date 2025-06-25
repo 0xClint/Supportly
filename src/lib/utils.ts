@@ -1,5 +1,7 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { QUERY_PRICE } from "./constants";
+import { User } from "./db/db.types";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -26,6 +28,46 @@ export function bigintToNumberSafe(value: bigint): number {
   return Number(value);
 }
 
+export function balanceToQueries(balance: number) {
+  return Math.floor(balance / QUERY_PRICE);
+}
+
 export function isFloatString(str: string): boolean {
   return /^\d+(\.\d+)?$/.test(str.trim());
+}
+
+export function getInitials(name: string = "AB"): string {
+  const words = name.trim().split(/\s+/); // split by whitespace
+  const initials = words.slice(0, 2).map((word) => word[0].toUpperCase());
+  return initials.join("");
+}
+
+export function totalSessionsCount(user: User): number {
+  return user.projects.reduce(
+    (total, project) => total + project.sessions.length,
+    0
+  );
+}
+
+export function generateEmbedIframe(
+  endpoint: string,
+  userId: string,
+  projectId: string
+): string {
+  const src = `${endpoint}/chat.html?userId=${encodeURIComponent(
+    userId
+  )}&projectId=${encodeURIComponent(projectId)}`;
+
+  return `<iframe
+  src="${src}"
+  width="300"
+  height="400"
+  style="
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    border: none;
+    z-index: 9999;
+  "
+></iframe>`;
 }

@@ -2,7 +2,7 @@ import { GetCommand, PutCommand, UpdateCommand } from "@aws-sdk/lib-dynamodb";
 import { dbClient } from "./dynamoDBClient";
 import { createHash } from "crypto";
 import { Project, User } from "./db.types";
-import { v4 as uuid } from "uuid";
+
 
 const USERS_TABLE = "agent-action-users";
 
@@ -56,6 +56,7 @@ export async function addProjectToUser(res: {
   data_url: string;
   website_url: string;
   embedded_url: string;
+  project_id: string;
 }): Promise<void> {
   const result = await dbClient.send(
     new GetCommand({
@@ -67,10 +68,18 @@ export async function addProjectToUser(res: {
   const user = result.Item;
   if (!user) throw new Error("User not found");
 
-  const { name, logo_url, model, data_url, website_url, embedded_url } = res;
+  const {
+    name,
+    logo_url,
+    model,
+    data_url,
+    website_url,
+    project_id,
+    embedded_url,
+  } = res;
 
   const newProject: Project = {
-    id: uuid(),
+    id: project_id,
     name,
     logo_url,
     model,

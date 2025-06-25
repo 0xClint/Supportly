@@ -1,0 +1,142 @@
+"use client";
+import React, { useMemo } from "react";
+import {
+  Card,
+  CardAction,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { useParams } from "next/navigation";
+import { useUserData } from "@/context/UserContext";
+import type { Project, Session } from "@/lib/db/db.types";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { getInitials } from "@/lib/utils";
+import { CardSim, ExternalLink, SquareArrowOutUpRightIcon } from "lucide-react";
+import Link from "next/link";
+
+export const dummySessions: Session[] = [
+  {
+    session_id: "session_001",
+    timestamp: "2025-06-25T15:20:00Z",
+    question: "How do I reset my password?",
+    answer:
+      "You can reset your password by clicking on 'Forgot Password' at the login screen.",
+    txId: "0xabc123456789def001",
+  },
+  {
+    session_id: "session_002",
+    timestamp: "2025-06-25T15:25:00Z",
+    question: "Where can I check my order history?",
+    answer:
+      "Your order history is available under the 'My Account' > 'Orders' section.",
+    txId: "0xdef987654321abc002",
+  },
+  {
+    session_id: "session_003",
+    timestamp: "2025-06-25T15:30:00Z",
+    question: "Can I update my shipping address?",
+    answer:
+      "Yes, you can update it from your profile settings before placing an order.",
+    txId: "0x456def123abc789003",
+  },
+];
+
+export default function Project() {
+  const { id } = useParams();
+  console.log(id);
+  const { projects } = useUserData();
+
+  const data: Project | undefined = useMemo(
+    () => projects.find((project) => project.id == id),
+    [projects]
+  );
+
+  return (
+    <>
+      <div className="flex flex-1 flex-col gap-4 py-4 px-20 pt-0">
+        <div className="container mx-auto">
+          <h3 className="scroll-m-20 text-xl mb-4 font-semibold tracking-tight">
+            Project Details
+          </h3>
+          <Card className="w-full">
+            <CardHeader>
+              <CardDescription>project id : {data?.id}</CardDescription>
+              <CardTitle className="text-3xl font-semibold tabular-nums @[250px]/card:text-3xl">
+                {data?.name}
+              </CardTitle>
+              <CardAction className="h-14">
+                <Avatar className="rounded-lg w-16 h-16">
+                  <AvatarImage src={data?.logo_url} />
+                  <AvatarFallback>{getInitials(data?.name)}</AvatarFallback>
+                </Avatar>
+              </CardAction>
+            </CardHeader>
+            <CardFooter className=" gap-10 text-sm">
+              <div>
+                <div className="w-24 text-muted-foreground  gap-2">Model</div>
+                <div className=" flex gap-2 text-lg font-medium">
+                  {data?.model}
+                </div>
+              </div>
+              <div>
+                <div className="w-24 text-muted-foreground gap-2">
+                  Data File
+                </div>
+                <div className="flex gap-2 text-lg font-medium">
+                  <Link
+                    href={data?.data_url || "#"}
+                    target="_blank"
+                    className="flex justify-center items-center"
+                  >
+                    <Button variant={"link"} className="text-lg p-0 m-0">
+                      File
+                      <ExternalLink className="h-4" />
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+              <div>
+                <div className="w-24 text-muted-foreground gap-2">Website</div>
+                <div className="flex gap-2 text-lg font-medium">
+                  {data?.website_url || "-"}
+                </div>
+              </div>
+            </CardFooter>
+          </Card>
+        </div>
+        <div className="container mx-auto">
+          <h3 className="scroll-m-20 text-xl mb-4 font-semibold tracking-tight">
+            User Interactions
+          </h3>
+          <div className="flex flex-col gap-5">
+            {dummySessions.map(({ txId, question, answer }) => (
+              <Card className="relative w-full gap-1" key={txId}>
+                <CardHeader>
+                  <h3 className=" m-0 p-0">{question}</h3>
+                  <CardAction className="">
+                    <Link
+                      href={`https://sepolia.basescan.org/tx/${"dfg"}`}
+                      className="absolute top-4 right-4"
+                    >
+                      <Button variant="ghost" className="w-4">
+                        <SquareArrowOutUpRightIcon />
+                      </Button>
+                    </Link>
+                  </CardAction>
+                </CardHeader>
+                <CardFooter>
+                  <p className="text-muted-foreground text-sm m-0 p-0">
+                    {answer}
+                  </p>
+                </CardFooter>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}

@@ -28,6 +28,7 @@ interface PaymentProps {
 
 function PaymentForm({ evmAddress }: PaymentProps) {
   const { address, isConnected } = useAccount();
+  const { refreshBalance } = useWallet();
   const { connect, connectors } = useConnect();
   const [value, setValue] = useState<string>("5");
   const [isProcessing, setIsProcessing] = useState(false);
@@ -38,8 +39,7 @@ function PaymentForm({ evmAddress }: PaymentProps) {
   async function handlePayment(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!isFloatString(value)) return;
-    // connect({ connector: injected() });
-    console.log("Hello");
+    connect({ connector: injected() });
 
     const paymentRequirements: PaymentRequirements = {
       scheme: "exact",
@@ -112,6 +112,7 @@ function PaymentForm({ evmAddress }: PaymentProps) {
       }
 
       const result = await response.json();
+      await refreshBalance();
       console.log("result", result);
       setMessage("✅ Payment successful!");
     } catch (error: any) {
@@ -137,9 +138,7 @@ function PaymentForm({ evmAddress }: PaymentProps) {
         <form onSubmit={handlePayment}>
           <DialogHeader>
             <DialogTitle>Topup Wallet</DialogTitle>
-            <DialogDescription>
-              Add USDC to your Supportly Wallet
-            </DialogDescription>
+            <DialogDescription>Each query costs 0.1 USDC</DialogDescription>
           </DialogHeader>
 
           <div className="grid gap-3 py-4">
