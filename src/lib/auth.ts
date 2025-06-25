@@ -32,7 +32,7 @@ export const authOptions: AuthOptions = {
 
         if (!existingUser) {
           await createUser({
-            user_id: user.email,
+            email: user.email,
             name: user.name || "",
             image_url:
               user.image ||

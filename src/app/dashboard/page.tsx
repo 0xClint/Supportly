@@ -19,20 +19,23 @@ import {
 
 import { Separator } from "@/components/ui/separator";
 import { DataTable } from "@/components/data-table/data-table";
-import { columns, paymentData } from "@/components/data-table/columns";
+import { columns } from "@/components/data-table/columns";
 
 import { CreateServiceDialog } from "@/components/add-service-dialog";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useUserData } from "@/context/UserContext";
+import { TopupWalletDialog } from "@/components/topup-wallet-dialog";
 
 export default function ModeToggle() {
   const { setTheme } = useTheme();
+  const { projects } = useUserData();
   const router = useRouter();
 
   return (
     <>
-      <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
+      <header className="flex h-16 shrink-0 justify-between items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
         <div className="flex items-center gap-2 px-4">
           <SidebarTrigger className="-ml-1" />
           <Separator
@@ -46,6 +49,9 @@ export default function ModeToggle() {
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
+        </div>
+        <div className="flex items-center gap-2 px-4">
+          <TopupWalletDialog />
         </div>
       </header>
       <div className="flex flex-1 flex-col gap-4 py-4 px-20 pt-0">
@@ -63,7 +69,7 @@ export default function ModeToggle() {
         </div>
 
         <div className="container mx-auto ">
-          <DataTable columns={columns} data={paymentData} />
+          <DataTable columns={columns} data={projects} />
         </div>
       </div>
     </>

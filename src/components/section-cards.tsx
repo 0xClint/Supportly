@@ -23,16 +23,11 @@ export function SectionCards() {
           <CardTitle className="text-3xl font-semibold tabular-nums @[250px]/card:text-3xl">
             ${balances} USDC
           </CardTitle>
-          <CardAction>
-            <Badge variant="outline">
-              {/* <IconTrendingUp /> */}
-              +12.5%
-            </Badge>
-          </CardAction>
+          <CardAction></CardAction>
         </CardHeader>
         <CardFooter className="flex-col items-start gap-1.5 text-sm">
           <div className="line-clamp-1 flex gap-2 font-medium">
-           Wallet Address
+            Wallet Address
             {/* <IconTrendingUp className="size-4" /> */}
           </div>
           <div className="text-muted-foreground flex justify-center items-center gap-2">
@@ -41,9 +36,7 @@ export function SectionCards() {
               variant="secondary"
               className="size-7 cursor-pointer"
               onClick={async () =>
-                await navigator.clipboard.writeText(
-                 evmAddress
-                )
+                await navigator.clipboard.writeText(evmAddress)
               }
             >
               <Copy className="h-[14px]" />
@@ -55,13 +48,13 @@ export function SectionCards() {
         <CardHeader>
           <CardDescription>Queries Left</CardDescription>
           <CardTitle className="text-3xl font-semibold tabular-nums @[250px]/card:text-3xl">
-            57
+            0
           </CardTitle>
           <CardAction>
-            <Badge variant="outline">
-              {/* <IconTrendingUp /> */}
+            {/* <Badge variant="outline">
+              <IconTrendingUp />
               +12.5%
-            </Badge>
+            </Badge> */}
           </CardAction>
         </CardHeader>
         <CardFooter className="flex-col items-start gap-1.5 text-sm">
@@ -78,14 +71,9 @@ export function SectionCards() {
         <CardHeader>
           <CardDescription>Total User Interactions</CardDescription>
           <CardTitle className="text-3xl font-semibold tabular-nums @[250px]/card:text-3xl">
-            200
+            0
           </CardTitle>
-          <CardAction>
-            <Badge variant="outline">
-              {/* <IconTrendingUp /> */}
-              +12.5%
-            </Badge>
-          </CardAction>
+          <CardAction></CardAction>
         </CardHeader>
         <CardFooter className="flex-col items-start gap-1.5 text-sm">
           <div className="line-clamp-1 flex gap-2 font-medium">

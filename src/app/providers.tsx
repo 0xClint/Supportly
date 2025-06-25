@@ -8,6 +8,7 @@ import { SessionProvider } from "next-auth/react";
 import { WagmiProvider } from "wagmi";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { wagmiConfig } from "@/lib/wagmiConfig";
+import { UserDataProvider } from "@/context/UserContext";
 
 const queryClient = new QueryClient();
 
@@ -23,7 +24,9 @@ export function Providers({ children }: { children: React.ReactNode }) {
         <QueryClientProvider client={queryClient}>
           <SessionProvider>
             <AuthProvider>
-              <WalletProvider>{children}</WalletProvider>
+              <UserDataProvider>
+                <WalletProvider>{children}</WalletProvider>
+              </UserDataProvider>
             </AuthProvider>
           </SessionProvider>
         </QueryClientProvider>

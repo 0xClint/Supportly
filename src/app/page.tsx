@@ -1,5 +1,4 @@
 "use client";
-import { Login } from "@/components/Login";
 import { useWallet } from "@/context/WalletContext";
 import { getUserByEmail } from "@/lib/db/user";
 import Link from "next/link";
@@ -22,8 +21,6 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 text-gray-900 flex flex-col">
       <div className="flex-grow">
-        <Login />
-        {/* Hero Section */}
         <button onClick={fetchUserData}>fetchUsers</button>
         <section className="max-w-6xl mx-auto px-4 py-20 lg:py-28">
           <div className="text-center">
@@ -35,10 +32,10 @@ export default function Home() {
             </p>
             <div className="flex flex-wrap gap-4 justify-center">
               <Link
-                href="/protected"
+                href="/dashboard"
                 className="px-6 py-3 bg-blue-600 hover:bg-blue-700 rounded-lg font-mono transition-colors text-white"
               >
-                Live demo
+                Dashboard
               </Link>
             </div>
           </div>

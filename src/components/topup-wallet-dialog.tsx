@@ -165,7 +165,7 @@ function PaymentForm({ evmAddress }: PaymentProps) {
                 Cancel
               </Button>
             </DialogClose>
-            <Button type="submit" disabled={!isConnected}>
+            <Button type="submit" disabled={isProcessing}>
               {isProcessing && <Loader2Icon />} Topup
             </Button>
           </DialogFooter>

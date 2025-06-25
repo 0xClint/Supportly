@@ -39,6 +39,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useSession } from "next-auth/react";
+import { hashEmail } from "@/lib/db/user";
+import { useUserData } from "@/context/UserContext";
 
 // Dummy model data
 const dummyModelData = [
@@ -84,24 +87,75 @@ const dummyModelData = [
 
 // Zod schema for validation
 const formSchema = z.object({
-  name_2273857586: z.string().min(1), // project name
-  name_9285303823: z.any(), // logo file
-  name_9799328929: z.string(), // selected model
-  name_6963087786: z.any(), // document file
-  name_5662767878: z.string().min(1), // website link
+  projectName: z.string().min(1), // project name
+  logoImage: z.any(), // logo file
+  model: z.string(), // selected model
+  file: z.any(), // document file
+  website: z.string().optional(), // website link
 });
 
 export default function CreateService({
   className,
   ...props
 }: React.ComponentProps<"div">) {
+  const [isLoading, setLoading] = useState<boolean>(false);
+  const { userId } = useUserData();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
+    defaultValues: {
+      website: "--",
+    },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    setLoading(true);
     try {
       console.log(values);
+
+      //FileData-Upload
+      // const fileForm = new FormData();
+      // fileForm.set("file", values.file);
+      // const fileUploadRes = await fetch("/api/upload-file", {
+      //   method: "POST",
+      //   body: fileForm,
+      // });
+      // const data_url = await fileUploadRes.json();
+      // console.log(fileUrl);
+
+      // //LogoImg-Upload
+      // const logoForm = new FormData();
+      // logoForm.set("file", values.logoImage);
+      // const logoUploadRes = await fetch("/api/upload-file", {
+      //   method: "POST",
+      //   body: logoForm,
+      // });
+      // const logo_url = await logoUploadRes.json();
+
+      const data_url = "data_url";
+      const logo_url = "logo_url";
+      const embedded_url = "embedded_url";
+
+      try {
+        await fetch("/api/add-project", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            user_id: userId,
+            name: values.projectName,
+            logo_url,
+            model: values.model,
+            data_url,
+            website_url: values.website,
+            embedded_url,
+          }),
+        });
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
+      }
+
       toast(
         <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
           <code className="text-white">{JSON.stringify(values, null, 2)}</code>
@@ -155,7 +209,7 @@ export default function CreateService({
                   {/* Project Name */}
                   <FormField
                     control={form.control}
-                    name="name_2273857586"
+                    name="projectName"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Project Name</FormLabel>
@@ -174,9 +228,9 @@ export default function CreateService({
                   {/* Logo File Upload */}
                   <FormField
                     control={form.control}
-                    name="name_9285303823"
+                    name="logoImage"
                     render={({ field: { onChange, ref } }) => (
-                      <FormItem>
+                      <FormItem className="w-50">
                         <FormLabel>Logo Image</FormLabel>
                         <FormControl>
                           <Input
@@ -194,7 +248,7 @@ export default function CreateService({
                   {/* Select Model */}
                   <FormField
                     control={form.control}
-                    name="name_9799328929"
+                    name="model"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Select Model</FormLabel>
@@ -223,14 +277,15 @@ export default function CreateService({
                   {/* Document Upload */}
                   <FormField
                     control={form.control}
-                    name="name_6963087786"
+                    name="file"
                     render={({ field: { onChange, ref } }) => (
-                      <FormItem>
+                      <FormItem className="w-50">
                         <FormLabel>Upload Document</FormLabel>
                         <FormControl>
                           <Input
                             type="file"
                             accept=".txt"
+                            required
                             onChange={(e) => onChange(e.target.files?.[0])}
                             ref={ref}
                           />
@@ -243,7 +298,7 @@ export default function CreateService({
                   {/* Website Link */}
                   <FormField
                     control={form.control}
-                    name="name_5662767878"
+                    name="website"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Website Link</FormLabel>
@@ -252,6 +307,7 @@ export default function CreateService({
                             placeholder="https://example.com"
                             type="url"
                             {...field}
+                            value={field.value ?? ""}
                           />
                         </FormControl>
                         <FormMessage />

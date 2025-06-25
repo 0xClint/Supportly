@@ -16,7 +16,7 @@ import {
 
 import { Separator } from "@/components/ui/separator";
 import { DataTable } from "@/components/data-table/data-table";
-import { columns, paymentData } from "@/components/data-table/columns";
+import { columns } from "@/components/data-table/columns";
 import { SectionCards } from "@/components/section-cards";
 import { useWallet } from "@/context/WalletContext";
 import { Button } from "@/components/ui/button";
@@ -51,9 +51,7 @@ export default function Wallet() {
           </Breadcrumb>
         </div>
         <div className="flex items-center gap-2 px-4">
-          {/* <Button variant={"secondary"}>Topup Wallet</Button> */}
           <TopupWalletDialog />
-          <DialogDemo />
         </div>
       </header>
       <div className="flex flex-1 flex-col gap-4 py-4 px-20 pt-0">
@@ -63,8 +61,8 @@ export default function Wallet() {
           <h3 className="scroll-m-20 text-xl mb-4 font-semibold tracking-tight">
             Transaction History
           </h3>
-          <Button onClick={fetchAddreses}>Click</Button>
-          <DataTable columns={columns} data={paymentData} />
+          {/* <Button onClick={fetchAddreses}>Click</Button> */}
+          {/* <DataTable columns={columns} data={paymentData} /> */}
         </div>
       </div>
     </>

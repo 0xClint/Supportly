@@ -21,6 +21,8 @@ const WalletProviderFn = () => {
   const [balances, setBalances] = useState<string>("0.00");
 
   const fetchEvmAddress = async () => {
+    // hashEmail
+    console.log(session);
     const res = await fetch("/api/account");
     if (res.ok) {
       const { address } = await res.json();
