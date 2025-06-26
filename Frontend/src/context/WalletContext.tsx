@@ -20,17 +20,16 @@ const WalletProviderFn = () => {
   const [accountId, setAccountId] = useState<string>();
   const [balances, setBalances] = useState<string>("0.00");
 
-  const fetchEvmAddress = async () => {
-    // hashEmail
-    console.log(session);
+  const fetchEvmAddress = useCallback(async () => {
+    console.log(session); 
     const res = await fetch("/api/account");
     if (res.ok) {
       const { address } = await res.json();
       console.log(address);
       setEvmAddress(address);
-      // setAccountId(accountId);
+
     }
-  };
+  }, [session]);
 
   const getAccounts = async () => {
     let response = await cdpClient.evm.listAccounts();
@@ -58,6 +57,7 @@ const WalletProviderFn = () => {
       refreshBalance();
     }
   }, [evmAddress, refreshBalance]);
+
   return {
     evmAddress,
     accountId,

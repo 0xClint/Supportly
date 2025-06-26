@@ -1,5 +1,5 @@
 "use client";
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import {
   Card,
   CardAction,
@@ -15,16 +15,33 @@ import type { Project } from "@/lib/db/db.types";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { getInitials } from "@/lib/utils";
 import { ExternalLink, SquareArrowOutUpRightIcon } from "lucide-react";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 import Link from "next/link";
+import { SessionTable } from "@/components/session-table/session-table";
+import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 
 export default function Project() {
   const { id } = useParams();
 
   const { projects } = useUserData();
 
+  const rowsPerPage = 3;
+  const [startIndex, setStartIndex] = useState(0);
+  const [endIndex, setEndIndex] = useState(rowsPerPage);
+
   const data: Project | undefined = useMemo(() => {
-    return projects.find((project) => project.id == id);
+    const project = projects.find((project) => project.id === id);
+    return project
+      ? { ...project, sessions: [...project.sessions].reverse() }
+      : undefined;
   }, [projects, id]);
+  console.log(data?.sessions);
 
   return (
     <>
@@ -85,30 +102,63 @@ export default function Project() {
           </h3>
           <div className="flex flex-col gap-5">
             {data && data.sessions.length > 0
-              ? data.sessions.map(({ txId, question, answer }) => (
-                  <Card className="relative w-full gap-1" key={txId}>
-                    <CardHeader>
-                      <h3 className=" m-0 p-0">{question}</h3>
-                      <CardAction className="">
-                        <Link
-                          href={`https://sepolia.basescan.org/tx/${txId}`}
-                          target="_blank"
-                          className="absolute top-4 right-4"
-                        >
-                          <Button variant="ghost" className="w-4">
-                            <SquareArrowOutUpRightIcon />
-                          </Button>
-                        </Link>
-                      </CardAction>
-                    </CardHeader>
-                    <CardFooter>
-                      <p className="text-muted-foreground text-sm m-0 p-0">
-                        {answer}
-                      </p>
-                    </CardFooter>
-                  </Card>
-                ))
-              : "No Sessions"}
+              ? data.sessions
+                  .slice(startIndex, endIndex)
+                  .map(({ txId, question, answer }) => (
+                    <Card className="relative w-full gap-1" key={txId}>
+                      <CardHeader>
+                        <h3 className=" m-0 p-0">{question}</h3>
+                        <CardAction className="">
+                          <Link
+                            href={`https://sepolia.basescan.org/tx/${txId}`}
+                            target="_blank"
+                            className="absolute top-4 right-4"
+                          >
+                            <Button variant="ghost" className="w-4">
+                              <SquareArrowOutUpRightIcon />
+                            </Button>
+                          </Link>
+                        </CardAction>
+                      </CardHeader>
+                      <CardFooter>
+                        <p className="text-muted-foreground text-sm m-0 p-0">
+                          {answer}
+                        </p>
+                      </CardFooter>
+                    </Card>
+                  ))
+              : "No Sessions"}{" "}
+            <Pagination>
+              <PaginationContent>
+                <PaginationItem>
+                  <PaginationPrevious
+                    className={
+                      startIndex === 0
+                        ? "pointer-events-none opacity-50"
+                        : undefined
+                    }
+                    onClick={() => {
+                      setStartIndex(startIndex - rowsPerPage);
+                      setEndIndex(endIndex - rowsPerPage);
+                    }}
+                  />
+                </PaginationItem>
+
+                <PaginationItem>
+                  <PaginationNext
+                    className={
+                      endIndex === 100
+                        ? "pointer-events-none opacity-50"
+                        : undefined
+                    }
+                    onClick={() => {
+                      setStartIndex(startIndex + rowsPerPage); //10
+                      setEndIndex(endIndex + rowsPerPage); //10 + 10 = 20
+                    }}
+                  />
+                </PaginationItem>
+              </PaginationContent>
+            </Pagination>
           </div>
         </div>
       </div>

@@ -2,8 +2,8 @@ import express, { Request, Response } from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
 import { paymentMiddleware, Resource } from "x402-express";
-import { buildGraph, embeddings, initGraph } from "./chatbot";
-import { fetchVector, pinata } from "./pinata";
+import { buildGraph, embeddings } from "./chatbot";
+import { fetchVector } from "./pinata";
 import { MemoryVectorStore } from "langchain/vectorstores/memory";
 
 const app = express();
@@ -52,7 +52,6 @@ app.post("/chat", async (req: Request, res: Response) => {
     if (!Array.isArray(docs)) {
       throw new Error("Expected data to be an array of Document objects");
     }
-    // const docs = JSON.parse(data);
 
     const vectorStore = new MemoryVectorStore(embeddings);
     await vectorStore.addDocuments(docs);

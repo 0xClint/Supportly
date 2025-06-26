@@ -17,6 +17,8 @@
 /.next/
 /out/
 
+/dist
+
 # Environment variables
 .env
 .env.*.local

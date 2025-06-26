@@ -30,6 +30,8 @@
 # Coverage reports
 coverage/
 
+dist/
+
 # IDEs and editors
 .vscode/
 .idea/

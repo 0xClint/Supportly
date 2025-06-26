@@ -30,55 +30,13 @@ export const embeddings = new BedrockEmbeddings({
   },
 });
 
-async function loadAndSplitDocs(): Promise<Document[]> {
-  // const loader = new CheerioWebBaseLoader("https://omkar-ten.vercel.app/", {
-  //   selector: "p",
-  // });
-  const loader = new PuppeteerWebBaseLoader(
-    "https://lilianweng.github.io/posts/2023-06-23-agent/",
-    {
-      launchOptions: {
-        headless: "new",
-        args: ["--no-sandbox", "--disable-setuid-sandbox"],
-      },
-      gotoOptions: {
-        waitUntil: "networkidle2",
-        timeout: 30000,
-      },
-      evaluate: async (page) => {
-        await page.waitForSelector("body", { timeout: 10000 });
-        const content = await page.evaluate(() => {
-          const main = document.querySelector("main");
-          if (main && main.innerText.trim()) return main.innerText;
-          const body = document.querySelector("body");
-          return body ? body.innerText : "";
-        });
-        return content || "No content extracted.";
-      },
-    }
-  );
-  const rawDocs = await loader.load();
-
-  // console.log("📄 Loaded content preview:\n", rawDocs);
-
-  const splitter = new RecursiveCharacterTextSplitter({
-    chunkSize: 1000,
-    chunkOverlap: 200,
-  });
-  const splitDAta = await splitter.splitDocuments(rawDocs);
-  createFile(splitDAta);
-  // console.log("📄 Loaded splitter preview:\n");
-
-  return splitter.splitDocuments(rawDocs);
-}
-
 const InputSchema = z.object({
   question: z.string(),
 });
 
 const FullStateSchema = z.object({
   question: z.string(),
-  context: z.array(z.any()), // Optionally replace z.any() with a specific shape if needed
+  context: z.array(z.any()), 
   answer: z.string(),
 });
 
@@ -114,16 +72,3 @@ export async function buildGraph(vectorStore: MemoryVectorStore) {
 
   return graph;
 }
-
-export async function initGraph(docs: Document[]) {
-  // const docs = await loadAndSplitDocs();
-  // console.log(docs);
-  // const docs = await loadJsonFromTextFile("vector-response.txt");
-
-  const vectorStore = new MemoryVectorStore(embeddings);
-  await vectorStore.addDocuments(docs);
-  const graph = await buildGraph(vectorStore);
-  return graph;
-}
-
-// initGraph()

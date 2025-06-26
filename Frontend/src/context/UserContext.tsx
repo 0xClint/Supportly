@@ -4,6 +4,7 @@ import { useSession } from "next-auth/react";
 import {
   createContext,
   ReactNode,
+  useCallback,
   useContext,
   useEffect,
   useState,
@@ -15,7 +16,7 @@ const UserDataProviderFn = () => {
   const [sessionCnt, setSessionCnt] = useState<number>(1);
   const { status, data: session } = useSession();
 
-  const fetchUserData = async () => {
+  const fetchUserData = useCallback(async () => {
     const userEmail = session?.user.email;
     if (userEmail) {
       const response = await fetch("/api/user-details", {
@@ -27,7 +28,6 @@ const UserDataProviderFn = () => {
       const data = (await response.json()) as { user: User; error: string };
       const user = data.user;
       if (response.ok) {
-        // console.log("User:", user);
         setSessionCnt(totalSessionsCount(user));
         setUserId(user.user_id);
         setProjects(user.projects);
@@ -35,7 +35,7 @@ const UserDataProviderFn = () => {
         console.error("Error:", data.error);
       }
     }
-  };
+  }, [session?.user.email]);
 
   useEffect(() => {
     if (status === "authenticated") {
