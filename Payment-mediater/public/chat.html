@@ -200,6 +200,7 @@
             body: JSON.stringify({ prompt: msg, userId, projectId, dataUrl }),
           });
 
+          console.log(res);
           const data = await res.json();
           appendMessage(data.reply, "bot");
         } catch (err) {

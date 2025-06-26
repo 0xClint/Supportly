@@ -6,7 +6,6 @@ export const pinata = new PinataSDK({
   pinataGatewayKey: process.env.PINATA_GATEWAY_KEY,
 });
 
-const GROUP_ID = "0197936b-7aab-75db-b6e0-5e03d9a0f58d";
 
 export const fetchVector = async (dataUrl: string) => {
   try {
@@ -14,19 +13,17 @@ export const fetchVector = async (dataUrl: string) => {
 
     if (!res.ok) throw Error("Errorin fetching dataFile");
     const data = await res.json();
-    console.log(data);
+    console.log("[vector dat fetched]");
     return data;
   } catch (error) {
     console.log(error);
   }
-
-
 };
-(async () => {
-  await fetchVector(
-    "https://gateway.pinata.cloud/ipfs/bafkreifssswwccumuwkjuutz2jqaxflymxf4fdx46i6esodno44isgc7oi"
-  );
-})();
+// (async () => {
+//   await fetchVector(
+//     "https://gateway.pinata.cloud/ipfs/bafkreifssswwccumuwkjuutz2jqaxflymxf4fdx46i6esodno44isgc7oi"
+//   );
+// })();
 
 export const convertFile = async (cid: string) => {
   const url = await pinata.gateways.public.convert(cid);

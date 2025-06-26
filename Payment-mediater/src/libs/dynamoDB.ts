@@ -50,7 +50,7 @@ export async function addPromptSessions(
   );
 
   const user = result.Item;
-  console.log("[user]", user);
+  // console.log("[user]", user);
   if (!user) throw new Error("User not found");
 
   const updatedProjects = (user.projects || []).map((project: any) => {
@@ -62,7 +62,7 @@ export async function addPromptSessions(
     }
     return project;
   });
-  console.log("[updatedProjects]", updatedProjects);
+  // console.log("[updatedProjects]", updatedProjects);
 
   try {
     await dbClient.send(
@@ -82,15 +82,15 @@ export async function addPromptSessions(
   console.log(`Session added to project ${project_id} for user ${user_id}`);
 }
 
-async function main() {
-  const res = await addPromptSessions(
-    "sptly-94033f21c2de4dafz",
-    "65853e8b-784c-401e-bcaf-1725f9dd6e59",
-    "What is your name?",
-    "My name is Rakesh",
-    "0xf91cea9be82d167a37840d44c08f12b4b8d0ce54621c8f9f8181dc1928b01006"
-  );
-  console.log(res);
-}
+// async function main() {
+//   const res = await addPromptSessions(
+//     "sptly-94033f21c2de4dafz",
+//     "65853e8b-784c-401e-bcaf-1725f9dd6e59",
+//     "What is your name?",
+//     "My name is Rakesh",
+//     "0xf91cea9be82d167a37840d44c08f12b4b8d0ce54621c8f9f8181dc1928b01006"
+//   );
+//   console.log(res);
+// }
 
-main();
+// main();

@@ -67,7 +67,7 @@ async function loadAndSplitDocs(): Promise<Document[]> {
   });
   const splitDAta = await splitter.splitDocuments(rawDocs);
   createFile(splitDAta);
-  console.log("📄 Loaded splitter preview:\n");
+  // console.log("📄 Loaded splitter preview:\n");
 
   return splitter.splitDocuments(rawDocs);
 }
