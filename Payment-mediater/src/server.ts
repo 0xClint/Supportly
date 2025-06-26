@@ -103,6 +103,11 @@ app.post("/prompt", async (req: Request, res: Response) => {
   }
 });
 
+// GET /test route
+app.get("/test", (req: Request, res: Response) => {
+  res.status(200).json({ message: "✅ Server is running fine!" });
+});
+
 app.listen(PORT, () => {
   console.log(`🚀 Server listening at http://localhost:${PORT}`);
 });

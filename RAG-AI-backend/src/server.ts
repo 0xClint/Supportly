@@ -68,6 +68,12 @@ app.post("/chat", async (req: Request, res: Response) => {
 });
 
 // ***********************************************************
+
+// GET /test route
+app.get("/test", (req: Request, res: Response) => {
+  res.status(200).json({ message: "✅ Server is running fine!" });
+});
+
 // Start server
 app.listen(PORT, () => {
   console.log(`🚀 Chatbot server running at http://localhost:${PORT}`);
