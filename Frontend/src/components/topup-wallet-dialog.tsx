@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Loader2Icon, Plus } from "lucide-react";
+import { Loader2Icon, LoaderCircle, Plus } from "lucide-react";
 import { useState } from "react";
 import { PaymentRequirements, PaymentPayload } from "x402/types";
 import { preparePaymentHeader } from "x402/client";
@@ -31,6 +31,7 @@ function PaymentForm({ evmAddress }: PaymentProps) {
   const { connect } = useConnect();
   const [value, setValue] = useState<string>("5");
   const [isProcessing, setIsProcessing] = useState(false);
+  const [isSuccess, setSuccess] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
 
   const { signTypedDataAsync } = useSignTypedData();
@@ -115,11 +116,15 @@ function PaymentForm({ evmAddress }: PaymentProps) {
       await refreshBalance();
       console.log("result", result);
       setMessage("✅ Payment successful!");
+      setSuccess(true);
     } catch (error) {
       console.error("❌ Payment error:", error);
       setMessage(`❌ Payment failed: ${error || "Unknown error"}`);
     } finally {
       setIsProcessing(false);
+      setTimeout(async () => {
+        await refreshBalance();
+      }, 2000);
     }
   }
 
@@ -136,37 +141,53 @@ function PaymentForm({ evmAddress }: PaymentProps) {
         preventOutsideClose={true}
       >
         <form onSubmit={handlePayment}>
-          <DialogHeader>
-            <DialogTitle>Topup Wallet</DialogTitle>
-            <DialogDescription>Each query costs 0.1 USDC</DialogDescription>
-          </DialogHeader>
+          {isSuccess ? (
+            <DialogHeader className="my-4">
+              <DialogTitle>Wallet Topped Up</DialogTitle>
+              <DialogDescription>
+                You've successfully added {value} USDC to your Supportly wallet.
+                You're all set to handle new queries!
+              </DialogDescription>
+            </DialogHeader>
+          ) : (
+            <>
+              <DialogHeader>
+                <DialogTitle>Topup Wallet</DialogTitle>
+                <DialogDescription>Each query costs 0.1 USDC</DialogDescription>
+              </DialogHeader>
 
-          <div className="grid gap-3 py-4">
-            <Label htmlFor="name-1">Amount</Label>
-            <Input
-              id="name-1"
-              type="text"
-              name="name"
-              value={value}
-              min={"0"}
-              onChange={(e) => {
-                const val = e.target.value;
-                if (/^\d*\.?\d*$/.test(val)) {
-                  setValue(val);
-                }
-              }}
-            />
-          </div>
+              <div className="grid gap-3 py-4">
+                <Label htmlFor="name-1">Amount</Label>
+                <Input
+                  id="name-1"
+                  type="text"
+                  name="name"
+                  value={value}
+                  disabled={isProcessing}
+                  min={"0"}
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    if (/^\d*\.?\d*$/.test(val)) {
+                      setValue(val);
+                    }
+                  }}
+                />
+              </div>
+            </>
+          )}
 
           <DialogFooter>
             <DialogClose asChild>
               <Button variant="outline" disabled={isProcessing}>
-                Cancel
+                Close
               </Button>
             </DialogClose>
-            <Button type="submit" disabled={isProcessing}>
-              {isProcessing && <Loader2Icon />} Topup
-            </Button>
+            {!isSuccess && (
+              <Button type="submit" disabled={isProcessing}>
+                {isProcessing && <LoaderCircle className="animate-spin" />}{" "}
+                Topup
+              </Button>
+            )}
           </DialogFooter>
         </form>
       </DialogContent>
@@ -175,7 +196,7 @@ function PaymentForm({ evmAddress }: PaymentProps) {
 }
 
 export function TopupWalletDialog() {
-  const { evmAddress } = useWallet();
+  const { evmAddress, fetchEvmAddress } = useWallet();
   const handleClick = async () => {
     console.log("clcick");
   };
