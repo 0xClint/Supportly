@@ -145,8 +145,8 @@ function PaymentForm({ evmAddress }: PaymentProps) {
             <DialogHeader className="my-4">
               <DialogTitle>Wallet Topped Up</DialogTitle>
               <DialogDescription>
-                You've successfully added {value} USDC to your Supportly wallet.
-                You're all set to handle new queries!
+                {`You have successfully added ${value} USDC to your Supportly wallet.
+                You are all set to handle new queries!`}
               </DialogDescription>
             </DialogHeader>
           ) : (
