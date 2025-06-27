@@ -51,17 +51,17 @@ import { v4 as uuid } from "uuid";
 
 const dummyModelData = [
   {
-    id: "model-1",
-    name: "GPT-4.1",
-    provider: "OpenAI",
-    description: "OpenAI's advanced model",
-  },
-  {
     id: "model-2",
-    name: "Gemini 2.5 Pro 06-05",
+    name: "Gemini 2.5 ",
     provider: "Google",
     description: "Google's latest model",
     badge: "new",
+  },
+  {
+    id: "model-10",
+    name: "Titan Text G1",
+    provider: "Amazon",
+    description: "Amazon's native Bedrock-hosted model",
   },
   {
     id: "model-3",
@@ -69,24 +69,27 @@ const dummyModelData = [
     provider: "xAI",
     description: "xAI's latest model",
   },
-  {
-    id: "model-4",
-    name: "R1 1776",
-    provider: "Perplexity",
-    description: "Perplexity’s unbiased reasoning model",
-  },
+
   {
     id: "model-5",
-    name: "o3",
+    name: "GPT-o3",
     provider: "OpenAI",
     description: "OpenAI’s most powerful reasoning model",
     selected: true,
   },
+
   {
-    id: "model-6",
-    name: "Claude 4.0 Sonnet Thinking",
+    id: "model-7",
+    name: "Claude 3 Opus",
     provider: "Anthropic",
-    description: "Anthropic’s reasoning model",
+    description: "Anthropic’s most capable model with long context",
+  },
+
+  {
+    id: "model-9",
+    name: "LLaMA 3 70B",
+    provider: "Meta",
+    description: "Meta’s open-weight high-performance model",
   },
 ];
 
