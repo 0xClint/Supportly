@@ -7,12 +7,10 @@ const AuthProviderFn = () => {
   const { status } = useSession();
   const router = useRouter();
   const pathname = usePathname();
-
   useEffect(() => {
-    // Skip if still loading session
     if (status === "loading") return;
 
-    if (status === "unauthenticated") {
+    if (status === "unauthenticated" && pathname !== "/") {
       console.log("please login!");
       router.push(`/login?callbackUrl=${pathname}`);
     }

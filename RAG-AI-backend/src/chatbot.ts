@@ -36,12 +36,18 @@ const InputSchema = z.object({
 
 const FullStateSchema = z.object({
   question: z.string(),
-  context: z.array(z.any()), 
+  context: z.array(z.any()),
   answer: z.string(),
 });
 
 export async function buildGraph(vectorStore: MemoryVectorStore) {
-  const promptTemplate = await pull<ChatPromptTemplate>("rlm/rag-prompt");
+  const promptTemplate = ChatPromptTemplate.fromMessages([
+    [
+      "system",
+      `You are a friendly and professional customer support assistant. Respond clearly and helpfully using only the provided context. If the answer is not in the context, say "I'm not sure about that right now." Do not guess or make up information.`,
+    ],
+    ["human", "Context: {context}\n\nQuestion: {question}"],
+  ]);
 
   const retrieve = async (state: z.infer<typeof InputSchema>) => {
     const context = await vectorStore.similaritySearch(state.question, 4);
